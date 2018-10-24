@@ -1,7 +1,7 @@
 package main
 
 import (
-  "net/url"
+	"net/url"
 )
 
 func parseURL(s string) (addr, cipher, password string, err error) {
