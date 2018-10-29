@@ -48,10 +48,8 @@ func main() {
 	}
 
 	flag.BoolVar(&config.Verbose, "verbose", false, "verbose mode")
-	flag.StringVar(&flags.Cipher, "cipher", "AEAD_CHACHA20_POLY1305", "available ciphers: "+strings.Join(core.ListCipher(), " "))
 	flag.StringVar(&flags.Key, "key", "", "base64url-encoded key (derive from password if empty)")
 	flag.IntVar(&flags.Keygen, "keygen", 0, "generate a base64url-encoded random key of given length in byte")
-	flag.StringVar(&flags.Password, "password", "", "password")
 	flag.StringVar(&flags.Server, "s", "", "server listen address or url")
 	flag.StringVar(&flags.Client, "c", "", "client connect address or url")
 	flag.StringVar(&flags.Socks, "socks", "", "(client-only) SOCKS listen address")
@@ -85,16 +83,12 @@ func main() {
 	}
 
 	if flags.Client != "" { // client mode
-		addr := flags.Client
-		cipher := flags.Cipher
-		password := flags.Password
+		url := flags.Client
 		var err error
 
-		if strings.HasPrefix(addr, "ss://") {
-			addr, cipher, password, err = parseURL(addr)
-			if err != nil {
-				log.Fatal(err)
-			}
+		addr, cipher, password, err := parseURL(url)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		ciph, err := core.PickCipher(cipher, key, password)
