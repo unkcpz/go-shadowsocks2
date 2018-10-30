@@ -68,6 +68,15 @@ func main() {
 		return
 	}
 
+	flag.Usage = func() {
+		helpStr := fmt.Sprintf("Usage of %s:\n", os.Args[0]) +
+			"Ciphers are: " +
+			strings.Join(core.ListCipher(), " ") +
+			"\n"
+		fmt.Fprintf(flag.CommandLine.Output(), helpStr)
+		flag.PrintDefaults()
+	}
+
 	if flags.Client == "" && flags.Server == "" {
 		flag.Usage()
 		return
